@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import reactDom from 'react-dom';
+import { useEffect, useState } from 'react';
 
 function App() {
  const persons = ['Razzak', 'Salman','Atik','Ryhan','Rony']
@@ -14,6 +15,8 @@ function App() {
     <div className="App">
       <header className="App-header">
         <p>I am a react person</p>
+        <Counter></Counter>
+        <Users></Users>
         <ul>
           {
             persons.map(person => <li>{person}</li>)
@@ -25,6 +28,7 @@ function App() {
         {
           products.map(pd=><Product product={pd}></Product>)
         }
+
         
         <Product product={products[0]} ></Product>
         <Product product={products[1]} ></Product>
@@ -33,7 +37,7 @@ function App() {
         <Person name="salman" job="Actor" age='56'></Person>
         <Person name="Shahrukh" job="Actor" age='46'></Person>
         <Person name="Sushant" job="Actor" age='36'></Person>
-        
+
       </header>
     </div>
   );
@@ -55,6 +59,20 @@ function Person(props) {
     </div>
   )
 }
+function Counter() {
+  const [count, setCount] = useState(10);
+  const handleIncrease = () =>{
+    const newCount = count +1;
+    setCount(newCount);
+  }
+  return(
+    <div>
+      <h2>Counter:{count}</h2>
+      <button onClick={handleIncrease}>Increase</button>
+      <button onClick={() => setCount(count-1)}>Decrease</button>
+    </div>
+  )
+}
 function Product(props) {
   const productStyle={
     width:'200px',
@@ -64,7 +82,8 @@ function Product(props) {
     border:'2px solid gray',
     backgroundColor: 'lightgray',
     borderRadius:'5px', 
-    flex:'left', color:'darkblue'}
+    flex:'left', 
+    color:'darkblue'}
     const {name, price}= props.product
   return(
     <div style={productStyle}>
@@ -73,6 +92,28 @@ function Product(props) {
     <button>Buy now</button>
 
   </div>)
+  
+}
+function Users() {
+  const [users ,setUsers]= useState([]);
+  
+  useEffect(() =>{
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(data => setUsers(data))
+  },[]) 
+
+  
+  return(
+    <div>
+      <h3>Dynamic User:{users.length} </h3>
+      <ul>
+        {
+          users.map(user => <li>{user.email}</li>)
+        }
+      </ul>
+    </div>
+  )
   
 }
 
